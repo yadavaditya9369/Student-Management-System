@@ -36,6 +36,7 @@ export const attendanceSchema = z.object({
   path: ['verificationPhoto']
 });
 export const resultSchema = z.object({ student: z.string().length(24), subject: z.string().min(1), exam: z.string().min(1), marks: z.coerce.number().min(0), maxMarks: z.coerce.number().positive() });
+export const resultImportSchema = z.array(resultSchema).min(1).max(40);
 export const supportMessageSchema = z.object({
   type: z.enum(['help', 'contact', 'admissions']),
   name: z.string().trim().min(2).max(120),
