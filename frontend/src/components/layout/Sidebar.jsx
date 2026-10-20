@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Users, ClipboardCheck, GraduationCap, Settings, LogOut, X } from 'lucide-react';
+import { LayoutDashboard, Users, ClipboardCheck, GraduationCap, Settings, LogOut, X, ShieldCheck, UserRound } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 
@@ -9,7 +9,9 @@ const links = [
   { to: '/students', label: 'Students', icon: Users },
   { to: '/attendance', label: 'Attendance', icon: ClipboardCheck },
   { to: '/results', label: 'Examination Results', icon: GraduationCap },
-  { to: '/settings', label: 'Settings', icon: Settings }
+  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/admin/sign-in', label: 'Admin', icon: ShieldCheck },
+  { to: '/faculty/sign-in', label: 'Faculty', icon: UserRound }
 ];
 export default function Sidebar({ open, onClose }) {
   const { logout } = useAuth();
