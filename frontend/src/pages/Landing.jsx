@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, GraduationCap, HeartHandshake, LifeBuoy, Send, ShieldCheck } from 'lucide-react';
+import { BookOpen, GraduationCap, HeartHandshake, LifeBuoy, Send, ShieldCheck, Users } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
@@ -23,15 +23,16 @@ export default function Landing() {
   return <div className="school-portal">
     <header className="portal-header">
       <Link to="/" className="portal-school-brand"><span className="portal-crest"><GraduationCap size={25} /></span><span><strong>EDUTRACK SCHOOL</strong><small>Learning together, growing every day</small></span></Link>
-      <nav><a href="#home">Home</a><a href="#discover">Discover</a><a href="#admissions">Admissions</a><a href="#admissions">Contact Us</a></nav>
+      <nav><a href="#home">Home</a><a href="#discover">Discover</a><Link to="/admissions">Admissions</Link><a href="#admissions">Contact Us</a></nav>
     </header>
-    <main className="portal-main" id="home"><div className="portal-shade" /><div className="portal-welcome" id="discover"><span>WELCOME TO</span><h1>A place to learn,<br />grow and belong.</h1><p>Supporting every student on the journey to a brighter future.</p></div><section className="portal-login-card"><Login portal /></section></main>
-    <section className="portal-discover-section" aria-label="About the school">
-      <div className="portal-section-heading"><span>OUR SCHOOL</span><h2>A strong foundation<br />for every student.</h2><p>We bring students, families and educators together to make learning purposeful and every day count.</p></div>
+    <main className="portal-main" id="home"><div className="portal-shade" /><div className="portal-welcome"><span>WELCOME TO</span><h1>A place to learn,<br />grow and belong.</h1><p>Supporting every student on the journey to a brighter future.</p></div><section className="portal-login-card"><Login portal /></section></main>
+    <section className="portal-discover-section" id="discover" aria-label="Discover our school">
+      <div className="portal-section-heading"><span>DISCOVER OUR SCHOOL</span><h2>Curiosity today.<br />Confidence for life.</h2><p>School is more than lessons. It’s a place to explore new ideas, find your strengths and build friendships that help you thrive.</p><p className="portal-discover-detail">Our learning community supports students in the classroom and beyond, with a focus on knowledge, kindness and personal growth.</p></div>
       <div className="portal-value-grid">
         <article><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=760&q=85" alt="Students learning together in a classroom" /><div className="portal-value-copy"><span><BookOpen size={21} /></span><h3>Learning with purpose</h3><p>Build knowledge, curiosity and confidence through a supportive learning community.</p></div></article>
         <article><img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=760&q=85" alt="Students studying together" /><div className="portal-value-copy"><span><HeartHandshake size={21} /></span><h3>Growing together</h3><p>Students are encouraged to discover their strengths and care for one another.</p></div></article>
         <article><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=760&q=85" alt="Student taking part in a classroom activity" /><div className="portal-value-copy"><span><ShieldCheck size={21} /></span><h3>A safe community</h3><p>A welcoming environment helps every learner feel respected, included and ready to thrive.</p></div></article>
+        <article><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=760&q=85" alt="Students sharing a moment at school" /><div className="portal-value-copy"><span><Users size={21} /></span><h3>About our school</h3><p>We bring students, families and teachers together to create a place where everyone can learn and belong.</p></div></article>
       </div>
     </section>
     <section className="portal-support-section" id="admissions"><div className="portal-support-intro"><span>WE’RE HERE TO HELP</span><h2>Questions or need a hand?</h2><p>Send our school team a message. Choose the form that best fits what you need, and we’ll follow up by email.</p></div><div className="portal-support-grid">

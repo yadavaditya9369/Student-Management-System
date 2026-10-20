@@ -5,6 +5,9 @@ export function issueToken(user) {
 }
 
 export function cookieOptions() {
-  return { httpOnly: true, sameSite: 'lax', secure: process.env.COOKIE_SECURE === 'true', maxAge: 8 * 60 * 60 * 1000 };
+  const secure = process.env.COOKIE_SECURE === 'true';
+  // Vercel and onrender.com are cross-site, so browsers require SameSite=None
+  // for credentialed frontend API requests to include the auth cookie.
+  return { httpOnly: true, sameSite: secure ? 'none' : 'lax', secure, maxAge: 8 * 60 * 60 * 1000 };
 }
 

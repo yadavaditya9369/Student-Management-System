@@ -18,7 +18,8 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
-  res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.COOKIE_SECURE === 'true' }).json({ message: 'Logged out successfully' });
+  const secure = process.env.COOKIE_SECURE === 'true';
+  res.clearCookie('token', { httpOnly: true, sameSite: secure ? 'none' : 'lax', secure }).json({ message: 'Logged out successfully' });
 }
 
 export function me(req, res) {
