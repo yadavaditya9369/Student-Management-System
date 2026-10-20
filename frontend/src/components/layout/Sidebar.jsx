@@ -22,7 +22,8 @@ export default function Sidebar({ open, onClose }) {
     <div className="brand"><div className="brand-mark"><GraduationCap size={22} /></div><span>Edu<span className="accent">Track</span></span><button className="mobile-close" onClick={onClose}><X size={20} /></button></div>
     <nav>{links.map(({ to, label, icon: Icon }) => {
       const attendanceLocked = to === '/attendance' && !hasRegisteredStudents;
-      return <NavLink key={to} to={attendanceLocked ? '/students/new' : to} end={to === '/dashboard'} onClick={onClose} title={attendanceLocked ? 'Register at least one student to unlock attendance' : undefined} className={({ isActive }) => `${isActive ? 'active' : ''}${attendanceLocked ? ' attendance-locked' : ''}`}><Icon size={19} />{label}</NavLink>;
+      const portalClass = to === '/admin/sign-in' ? ' portal-admin-link' : to === '/faculty/sign-in' ? ' portal-faculty-link' : '';
+      return <NavLink key={to} to={attendanceLocked ? '/students/new' : to} end={to === '/dashboard'} onClick={onClose} title={attendanceLocked ? 'Register at least one student to unlock attendance' : undefined} className={({ isActive }) => `${isActive ? 'active' : ''}${attendanceLocked ? ' attendance-locked' : ''}${portalClass}`}><Icon size={19} />{label}</NavLink>;
     })}</nav>
     <button className="logout-button" onClick={logout}><LogOut size={19} />Sign out</button>
   </aside>;

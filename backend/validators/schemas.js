@@ -1,11 +1,12 @@
 import { z } from 'zod';
 
 const date = z.coerce.date();
-export const loginSchema = z.object({ email: z.string().email(), password: z.string().min(8) });
+export const loginSchema = z.object({ email: z.string().email(), password: z.string().min(8), role: z.enum(['admin', 'teacher']).optional() });
 export const registerSchema = z.object({
   name: z.string().min(2).max(120),
   email: z.string().email(),
-  password: z.string().min(8)
+  password: z.string().min(8),
+  role: z.enum(['admin', 'teacher']).optional()
 });
 export const studentSchema = z.object({
   studentId: z.string().min(2).max(30).regex(/^[A-Za-z0-9 .$\/+%-]+$/, 'Student ID must use characters supported by the Code 39 barcode'),
