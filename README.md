@@ -1,10 +1,10 @@
-# EduTrack — Student Management System
+# EduTrack — Student Management System :
 
 An administrative student management platform built with the MERN stack. EduTrack combines a React dashboard with an Express REST API and MongoDB for student records, attendance, examination results, and dashboard summaries.
 
 > **Project status:** This repository contains a working application intended for local development and further customization. Review the security, deployment, privacy, and licensing notes before using it with real institutional or student data.
 
-## Contents
+## Contents:
 
 - [Features](#features)
 - [Technology](#technology)
@@ -20,7 +20,7 @@ An administrative student management platform built with the MERN stack. EduTrac
 - [Copyright and attribution](#copyright-and-attribution)
 - [License](#license)
 
-## Features
+## Features :
 
 - Admin sign-in using bcrypt password hashing and a JWT stored in an HTTP-only cookie.
 - Role-protected administration routes for student records, attendance, and results.
@@ -31,7 +31,7 @@ An administrative student management platform built with the MERN stack. EduTrac
 - Responsive React interface, built with Vite.
 - API hardening with Helmet, credentialed CORS, centralized error handling, and login rate limiting.
 
-## Technology
+## Technology :
 
 | Area | Stack |
 | --- | --- |
@@ -40,7 +40,7 @@ An administrative student management platform built with the MERN stack. EduTrac
 | Database | MongoDB |
 | Authentication | JSON Web Token, bcryptjs, HTTP-only cookies |
 
-## Architecture
+## Architecture :
 
 ```text
 frontend/  React single-page application (Vite)
@@ -54,26 +54,26 @@ MongoDB    Application records and administrator accounts
 
 The frontend uses `VITE_API_URL` to locate the API. The API defaults to port `5000`; the Vite development server typically uses port `5173`.
 
-## Requirements
+## Requirements :
 
 - Node.js 18 or later and npm.
 - A MongoDB database, local or hosted (for example, MongoDB Atlas).
 - Git to clone the repository.
 
-## Local development
+## Local development :
 
-### 1. Get the code
+### 1. Get the code:
 
 ```bash
 git clone <repository-url>
 cd Student-Management-System
 ```
 
-### 2. Configure the backend
+### 2. Configure the backend :
 
 Create `backend/.env` with the variables described in [Environment variables](#environment-variables). This repository does not currently provide a backend `.env.example`, so create the file manually. Never commit `.env` or paste its secrets into an issue or pull request.
 
-### 3. Install dependencies and start the API
+### 3. Install dependencies and start the API :
 
 ```bash
 cd backend
@@ -83,7 +83,7 @@ npm run dev
 
 The API connects to MongoDB before listening at `http://localhost:5000`. Keep this terminal running.
 
-### 4. Create an administrator
+### 4. Create an administrator:
 
 In a second terminal, from `backend/`:
 
@@ -93,7 +93,7 @@ npm run seed:admin
 
 The script prompts for a name, email, and password, then creates an admin account. Use a unique, strong password.
 
-### 5. Configure and start the frontend
+### 5. Configure and start the frontend :
 
 Create `frontend/.env` if the API is not at the default URL:
 
@@ -111,7 +111,7 @@ npm run dev
 
 Open the local URL printed by Vite and sign in with the administrator account you created.
 
-### Useful commands
+### Useful commands :
 
 | Directory | Command | Purpose |
 | --- | --- | --- |
@@ -122,7 +122,7 @@ Open the local URL printed by Vite and sign in with the administrator account yo
 | `frontend/` | `npm run build` | Build frontend assets into `frontend/dist/` |
 | `frontend/` | `npm run preview` | Preview the production frontend build locally |
 
-## Environment variables
+## Environment variables:
 
 ### Backend (`backend/.env`)
 
@@ -152,11 +152,11 @@ COOKIE_SECURE=false
 
 Vite exposes `VITE_` variables to browser code. Do not put credentials, private keys, or other secrets in frontend environment variables.
 
-## Create the first administrator
+## Create the first administrator:
 
 Administrator creation is available through the local `npm run seed:admin` command. Treat access to the deployed environment and database as privileged: a person who can connect to the database may be able to create or alter accounts. The API also includes a registration route; assess whether that route should be available in your deployment before exposing the service publicly.
 
-## API overview
+## API overview:
 
 All routes are under `/api`. Except for health, authentication, and support submission, the application routes require authentication. Write operations apply role checks as implemented by the backend.
 
@@ -182,7 +182,7 @@ All routes are under `/api`. Except for health, authentication, and support subm
 
 The health check is available at `GET http://localhost:5000/api/health`. Request field schemas and detailed query parameter behavior are defined in the backend validators and controllers.
 
-## Security and data handling
+## Security and data handling :
 
 - Keep environment files, database URIs, JWT secrets, and real credentials private. Rotate any secret that has been exposed.
 - Use HTTPS in production and configure secure cookies and exact allowed CORS origins for the deployed frontend.
@@ -191,7 +191,7 @@ The health check is available at `GET http://localhost:5000/api/health`. Request
 - Review authentication and account-registration behavior, logging, and deployment configuration before public exposure. Application features alone do not guarantee regulatory compliance or security for every deployment.
 - The health endpoint indicates that the API process responded; it is not a complete database or service readiness check.
 
-## Production deployment
+## Production deployment :
 
 1. Provision MongoDB and create a dedicated database user with scoped permissions.
 2. Set production secrets through your hosting provider's secret manager or environment configuration.
@@ -202,7 +202,7 @@ The health check is available at `GET http://localhost:5000/api/health`. Request
 
 The repository does not define a specific hosting provider or a production deployment pipeline. Adapt these steps to the chosen platform.
 
-## Contributing
+## Contributing :
 
 Contributions are welcome. A practical contribution process:
 
@@ -213,10 +213,10 @@ Contributions are welcome. A practical contribution process:
 
 By submitting a contribution, you confirm that you have the right to submit it and that it may be reviewed and distributed under the project's applicable terms. The repository currently has no `CONTRIBUTING.md` or declared open-source license; see [License](#license) before reusing or redistributing the code.
 
-## Copyright and attribution
+## Copyright and attribution :
 
 The project is associated with **Aditya Yadav**. **Aayush Sharma contributed to Aditya Yadav's project.** This attribution records the contribution and does not by itself imply a transfer of ownership, a joint copyright determination, or a grant of permission to reuse or redistribute the code. Confirm the relevant ownership and third-party asset terms with the rights holders before publishing or reusing the project.
 
-## License
+## License :
 
 **No license is currently specified in this repository.** Until the project owner adds a license, do not assume that the code may be copied, modified, redistributed, or used commercially. The copyright attribution above is not a license. The project owner should choose and add a license file if they intend to grant reuse permissions.
