@@ -6,6 +6,7 @@ const studentSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   phone: { type: String, required: true, trim: true },
   aadhaarNumber: { type: String, required: true, match: /^\d{12}$/ },
+  aadhaarVerified: { type: Boolean, required: true, default: false },
   dateOfBirth: { type: Date, required: true },
   gender: { type: String, enum: ['Male', 'Female', 'Other', ''] },
   profileImageUrl: { type: String, default: '' },

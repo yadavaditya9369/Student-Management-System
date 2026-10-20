@@ -13,6 +13,7 @@ export const studentSchema = z.object({
   email: z.string().email(),
   phone: z.string().min(7).max(20),
   aadhaarNumber: z.string().regex(/^\d{12}$/, 'Aadhaar number must contain exactly 12 digits'),
+  aadhaarVerified: z.literal(true),
   dateOfBirth: date,
   gender: z.enum(['Male', 'Female', 'Other', '']).optional(),
   profileImageUrl: z.string().max(2_100_000).regex(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/).or(z.literal('')).optional(),

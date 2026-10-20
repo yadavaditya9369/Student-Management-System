@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { CheckCircle2, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
 
@@ -13,6 +14,12 @@ export default function StudentForm() {
   const navigate = useNavigate();
   const [form, setForm] = useState(initial);
   const [busy, setBusy] = useState(false);
+  const [verifiedAadhaar, setVerifiedAadhaar] = useState('');
+  const [otpOpen, setOtpOpen] = useState(false);
+  const [otpInput, setOtpInput] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [verificationSuccess, setVerificationSuccess] = useState(false);
+  const aadhaarVerified = Boolean(form.aadhaarNumber && verifiedAadhaar === form.aadhaarNumber);
 
   useEffect(() => {
     if (!edit) return;
@@ -20,6 +27,27 @@ export default function StudentForm() {
   }, [id, edit]);
 
   const change = (e) => setForm((current) => ({ ...current, [e.target.name]: e.target.value }));
+
+  const startAadhaarVerification = () => {
+    if (!/^\d{12}$/.test(form.aadhaarNumber)) {
+      toast.error('Enter a valid 12-digit Aadhaar number first');
+      return;
+    }
+    setOtpInput('');
+    setOtpError('');
+    setVerificationSuccess(false);
+    setOtpOpen(true);
+  };
+
+  const verifyDemoOtp = (event) => {
+    event.preventDefault();
+    if (otpInput !== '123456') {
+      setOtpError('Incorrect demo OTP. Please try again.');
+      return;
+    }
+    setVerifiedAadhaar(form.aadhaarNumber);
+    setVerificationSuccess(true);
+  };
 
   const uploadImage = (field) => (e) => {
     const file = e.target.files?.[0];
@@ -41,10 +69,17 @@ export default function StudentForm() {
 
   const submit = async (e) => {
     e.preventDefault();
+    if (!edit && !aadhaarVerified) {
+      toast.error('Verify the Aadhaar number before creating the student');
+      return;
+    }
     setBusy(true);
     try {
-      const payload = { ...form };
-      if (edit && !payload.aadhaarNumber) delete payload.aadhaarNumber;
+      const payload = { ...form, aadhaarVerified: aadhaarVerified || (edit && !form.aadhaarNumber) };
+      if (edit && !payload.aadhaarNumber) {
+        delete payload.aadhaarNumber;
+        delete payload.aadhaarVerified;
+      }
       const { data } = await (edit ? api.put(`/students/${id}`, payload) : api.post('/students', payload));
       toast.success(edit ? 'Student updated' : 'Student added');
       navigate(edit ? '/students' : `/students/${data.student._id}/card`);
@@ -65,10 +100,10 @@ export default function StudentForm() {
         <h2>Basic information</h2><p className="muted">Personal and academic details.</p>
         <div className="form-grid">
           {fields.map(([name, label, placeholder]) => <label key={name}>{label}<input required type={name.includes('Date') || name === 'dateOfBirth' || name === 'enrollmentDate' ? 'date' : name === 'email' ? 'email' : 'text'} name={name} value={form[name] || ''} onChange={change} placeholder={placeholder} /></label>)}
-          <label>Aadhaar number {!edit && <span aria-hidden="true">*</span>}<input name="aadhaarNumber" type="text" inputMode="numeric" autoComplete="off" pattern="[0-9]{12}" maxLength={12} minLength={12} required={!edit} value={form.aadhaarNumber} onChange={(e) => setForm((current) => ({ ...current, aadhaarNumber: e.target.value.replace(/\D/g, '') }))} placeholder="12-digit Aadhaar number" aria-describedby="aadhaar-help" /></label>
+          <label className="aadhaar-field">Aadhaar number {!edit && <span aria-hidden="true">*</span>}<div className="aadhaar-input-row"><input name="aadhaarNumber" type="text" inputMode="numeric" autoComplete="off" pattern="[0-9]{12}" maxLength={12} minLength={12} required={!edit} value={form.aadhaarNumber} onChange={(e) => setForm((current) => ({ ...current, aadhaarNumber: e.target.value.replace(/\D/g, '') }))} placeholder="12-digit Aadhaar number" aria-describedby="aadhaar-help" />{aadhaarVerified ? <span className="aadhaar-verified"><ShieldCheck size={15} /> Verified</span> : <button type="button" className="secondary-button aadhaar-verify-button" onClick={startAadhaarVerification}>Verify</button>}</div></label>
           <label>Gender<select name="gender" value={form.gender} onChange={change}><option value="">Select gender</option><option>Female</option><option>Male</option><option>Other</option></select></label>
           <label>Status<select name="status" value={form.status} onChange={change}><option>Active</option><option>Inactive</option><option>Graduated</option></select></label>
-          <p id="aadhaar-help" className="muted wide">Aadhaar is sensitive personal information. It is hidden from student list and profile API responses. On edit, leave blank to keep the existing number.</p>
+          <p id="aadhaar-help" className="muted wide">Demo only: use OTP <strong>123456</strong>. No Aadhaar OTP is sent to UIDAI. On edit, leave the number blank to keep the existing one.</p>
         </div>
       </div>
       <div className="form-section">
@@ -83,5 +118,6 @@ export default function StudentForm() {
       </div>
       <div className="form-actions"><Link className="secondary-button" to="/students">Cancel</Link><button className="primary-button" disabled={busy}>{busy ? 'Saving...' : edit ? 'Save changes' : 'Create student'}</button></div>
     </form>
+    {otpOpen && <div className="verification-overlay"><section className="verification-dialog" role="dialog" aria-modal="true" aria-labelledby="aadhaar-verification-title">{verificationSuccess ? <div className="verification-success"><CheckCircle2 size={55} /><div className="eyebrow">DEMO FLOW</div><h2 id="aadhaar-verification-title">Verification successful</h2><p>Aadhaar number ending in {form.aadhaarNumber.slice(-4)} is marked verified for this demo.</p><button type="button" className="primary-button" onClick={() => setOtpOpen(false)}>Continue to student form</button></div> : <><button type="button" className="verification-close" onClick={() => setOtpOpen(false)}>Close</button><div className="eyebrow">DEMO OTP VERIFICATION</div><h2 id="aadhaar-verification-title">Verify Aadhaar number</h2><p className="muted">This is a local demo only. No OTP is sent to Aadhaar or UIDAI.</p><div className="demo-otp-code">Demo OTP: <strong>123456</strong></div><form onSubmit={verifyDemoOtp}><label>Enter 6-digit OTP<input type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="one-time-code" value={otpInput} onChange={(event) => { setOtpInput(event.target.value.replace(/\D/g, '')); setOtpError(''); }} required /></label>{otpError && <p className="otp-error" role="alert">{otpError}</p>}<button className="primary-button" type="submit">Verify OTP</button></form></>}</section></div>}
   </>;
 }
