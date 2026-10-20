@@ -8,13 +8,15 @@ export const registerSchema = z.object({
   password: z.string().min(8)
 });
 export const studentSchema = z.object({
-  studentId: z.string().min(2).max(30),
+  studentId: z.string().min(2).max(30).regex(/^[A-Za-z0-9 .$\/+%-]+$/, 'Student ID must use characters supported by the Code 39 barcode'),
   fullName: z.string().min(2).max(120),
   email: z.string().email(),
   phone: z.string().min(7).max(20),
+  aadhaarNumber: z.string().regex(/^\d{12}$/, 'Aadhaar number must contain exactly 12 digits'),
   dateOfBirth: date,
   gender: z.enum(['Male', 'Female', 'Other', '']).optional(),
-  profileImageUrl: z.string().url().or(z.literal('')).optional(),
+  profileImageUrl: z.string().max(2_100_000).regex(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/).or(z.literal('')).optional(),
+  signatureImageUrl: z.string().max(2_100_000).regex(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/).or(z.literal('')).optional(),
   course: z.string().min(2).max(100),
   semester: z.string().min(1).max(30),
   enrollmentDate: date,
@@ -23,7 +25,15 @@ export const studentSchema = z.object({
   guardianPhone: z.string().max(20).optional(),
   status: z.enum(['Active', 'Inactive', 'Graduated']).optional()
 });
-export const attendanceSchema = z.object({ student: z.string().length(24), date, status: z.enum(['Present', 'Absent', 'Late']) });
+export const attendanceSchema = z.object({
+  student: z.string().length(24),
+  date,
+  status: z.enum(['Present', 'Absent', 'Late']),
+  verificationPhoto: z.string().max(2_100_000).regex(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/).optional()
+}).refine((record) => record.status !== 'Present' || Boolean(record.verificationPhoto), {
+  message: 'A live verification photo is required to mark attendance present',
+  path: ['verificationPhoto']
+});
 export const resultSchema = z.object({ student: z.string().length(24), subject: z.string().min(1), exam: z.string().min(1), marks: z.coerce.number().min(0), maxMarks: z.coerce.number().positive() });
 export const supportMessageSchema = z.object({
   type: z.enum(['help', 'contact', 'admissions']),
