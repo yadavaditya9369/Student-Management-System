@@ -38,6 +38,23 @@ export const attendanceSchema = z.object({
 });
 export const resultSchema = z.object({ student: z.string().length(24), subject: z.string().min(1), exam: z.string().min(1), marks: z.coerce.number().min(0), maxMarks: z.coerce.number().positive() });
 export const resultImportSchema = z.array(resultSchema).min(1).max(40);
+export const feeRecordSchema = z.object({
+  student: z.string().length(24),
+  category: z.enum(['academic', 'hostel', 'library', 'bus']),
+  amount: z.coerce.number().positive().max(10_000_000),
+  dueDate: date,
+  period: z.string().trim().min(2).max(80)
+});
+export const feeStatusSchema = z.object({ status: z.enum(['Pending', 'Paid']) });
+export const libraryBookSchema = z.object({
+  title: z.string().trim().min(1).max(180),
+  author: z.string().trim().min(1).max(120),
+  category: z.string().trim().min(2).max(60),
+  isbn: z.string().trim().max(20).optional().or(z.literal('')),
+  totalCopies: z.coerce.number().int().min(1).max(10000),
+  shelf: z.string().trim().max(40).optional().or(z.literal(''))
+});
+export const libraryCirculationSchema = z.object({ action: z.enum(['issue', 'return']) });
 export const supportMessageSchema = z.object({
   type: z.enum(['help', 'contact', 'admissions']),
   name: z.string().trim().min(2).max(120),

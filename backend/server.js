@@ -14,6 +14,8 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 import resultRoutes from './routes/resultRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import supportRoutes from './routes/supportRoutes.js';
+import feeRoutes from './routes/feeRoutes.js';
+import libraryRoutes from './routes/libraryRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
@@ -27,6 +29,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/results', resultRoutes);
+app.use('/api/fees', feeRoutes);
+app.use('/api/library', libraryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/support', rateLimit({ windowMs: 60 * 60 * 1000, limit: 8, standardHeaders: true, message: { message: 'Too many messages. Please try again later.' } }), supportRoutes);
 app.use(notFound);
